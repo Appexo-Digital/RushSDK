@@ -53,7 +53,7 @@ extension UserManagerCore {
                                                                   locale: InfoHelper.locale ?? "en",
                                                                   applicationAnonymousID: SDKStorage.shared.applicationAnonymousID))
             .map { _ in true }
-            .catchAndReturn(false)
+            .catchErrorJustReturn(false)
     }
     
     func rxNewFeatureAppUser() -> Single<String?> {
@@ -89,7 +89,7 @@ extension UserManagerCore {
             .restApiTransport
             .callServerApi(requestBody: request)
             .map { _ in true }
-            .catchAndReturn(false)
+            .catchErrorJustReturn(false)
     }
     
     func check(token: String) -> Single<Bool> {

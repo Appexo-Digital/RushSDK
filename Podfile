@@ -11,8 +11,8 @@ end
 target 'RushSDK' do
   pod 'Alamofire'
   
-  pod 'RxSwift'
-  pod 'RxCocoa'
+  pod 'RxSwift', '~> 5.1'
+  pod 'RxCocoa', '~> 5.1'
   
   pod 'SwiftyStoreKit'
   

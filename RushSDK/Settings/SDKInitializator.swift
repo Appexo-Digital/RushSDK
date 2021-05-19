@@ -66,7 +66,7 @@ private extension SDKInitializator {
             .rxObtainTests()
             .subscribe(onSuccess: { [weak self] _ in
                 self?.abTestsTrigger.accept(true)
-            }, onFailure: { [weak self] _ in
+            }, onError: { [weak self] _ in
                 self?.abTestsTrigger.accept(false)
             })
             .disposed(by: disposeBag)
@@ -85,7 +85,7 @@ private extension SDKInitializator {
                 userManager
                     .rxUpdateMetaData()
                     .map { _ in true }
-                    .catchAndReturn(false)
+                    .catchErrorJustReturn(false)
             }
             .subscribe(onNext: { [weak self] success in
                 self?.userUpdateMetaDataTrigger.accept(success)
@@ -100,7 +100,7 @@ private extension SDKInitializator {
             .rxObtainConfiguration()
             .subscribe(onSuccess: { [weak self] config in
                 self?.configurationTrigger.accept(true)
-            }, onFailure: { [weak self] error in
+            }, onError: { [weak self] error in
                 self?.configurationTrigger.accept(false)
             })
             .disposed(by: disposeBag)
@@ -115,7 +115,7 @@ private extension SDKInitializator {
                 
                 return userManager
                     .check(token: userToken)
-                    .catchAndReturn(false)
+                    .catchErrorJustReturn(false)
             }
             .flatMapLatest { [purchaseManager] tokenIsValidated -> Single<(ReceiptValidateResponse?, Bool)> in
                 purchaseManager
@@ -151,13 +151,13 @@ private extension SDKInitializator {
             return userManager
                 .rxNewFeatureAppUser()
                 .map { _ in true }
-                .catchAndReturn(false)
+                .catchErrorJustReturn(false)
         }
 
         return userManager
             .rxFeatureAppLoginUser(with: userToken)
             .map { _ in true }
-            .catchAndReturn(false)
+            .catchErrorJustReturn(false)
     }
     
     func flatMapUserTokenIfTokenNotNil(receipt: ReceiptValidateResponse?, storedUserToken: String) -> Single<Bool> {
